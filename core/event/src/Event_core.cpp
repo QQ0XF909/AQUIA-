@@ -27,8 +27,12 @@ namespace CORE {
                 auto _event = std::make_shared<Event>();
                 boost::uuids::string_generator str_gen;
                 
-                _event -> str_gen(js["event_uuid"].get<std::string>());
-                std::uint8_t type_value = js["event_type"].get<std::uint8_t>();
+                _event -> EventUUID = str_gen(js["event_uuid"].get<std::string>());
+                std::uint8_t type_value = js["event_type"].get<std::uint8_t>(); 
+                if (type_value > static_cast<std::uint8_t>(EventTYPE::PostDelete)) {
+                    throw std::runtime_error ("Invalid event type!");
+                }
+                
 
             } catch(const std::exception& exc) {
                 std::cerr << "Error: " << exc.what() << '\n';
