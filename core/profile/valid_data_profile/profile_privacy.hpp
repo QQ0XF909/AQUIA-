@@ -1,6 +1,6 @@
 namespace PROFILE {
     
-    enum class VisibilityLevel :uint8_t {
+    enum class VisibilityLevel : std::uint8_t {
         Public = 0,
         Friend = 1,
         CloseFriend = 2,

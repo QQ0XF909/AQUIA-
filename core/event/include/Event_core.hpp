@@ -9,7 +9,7 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/uuid/string_generator.hpp>
 
-/* Uuid от Boost  https://www.boost.org/doc/libs/1_73_0/libs/uuid/doc/uuid.html */
+/* uuid Boost  https://www.boost.org/doc/libs/1_73_0/libs/uuid/doc/uuid.html */
 
 #include <stdio.h>
 #include <nlohmann/json.hpp>
@@ -18,7 +18,7 @@
 
 namespace CORE::Domain {
 
-    enum class EventType : uint8_t {
+    enum class EventType : std::uint8_t {
         Unknown = 0,
         UserLogin,
         UserLogout,
@@ -46,17 +46,16 @@ namespace CORE::Domain {
 
             virtual ~Event() = default;
 
-           /* ================================= гетеры и сетеры ====================================*/
+         
             const std::string& getEventID() const noexcept { return EventUUID; }
             EventType getEventType() const noexcept { return EventTYPE; }
             std::chrono::system_clock::time_point getOccurredAt() const noexcept { return Timing; }
-           /* ===================================================================================== */
 
            
             virtual nlohmann::json toJson() const {
                 nlohmann::json jt;
                 jt["event_uuid"] = EventUUID;
-                jt["event_type"] = static_cast<uint8_t>(EventTYPE);
+                jt["event_type"] = static_cast<std::uint8_t>(EventTYPE);
                 jt["event_time"] = std::chrono::duration_cast<std::chrono::milliseconds>(
                                                                 Timing.time_since_epoch()).count();
                 return jt;
@@ -69,9 +68,9 @@ namespace CORE::Domain {
                 
                 auto eve = std::make_shared<Event>();
                 eve->EventUUID = jt.["event_uuid"].get<std::string>();
-                eve->EventTYPE = static_cast<EventType>(jt["event_type"].get<uint8_t>());
+                eve->EventTYPE = static_cast<EventType>(jt["event_type"].get<std::uint8_t>());
                 if (jt.contains("event_time")){
-                    auto ms = jt["event_time"].get<uint64_t>();
+                    auto ms = jt["event_time"].get<std::uint64_t>();
                     eve->Timing = std::chrono::system_clock::time_point(std::chrono::milliseconds(ms));                  
                 }
             }

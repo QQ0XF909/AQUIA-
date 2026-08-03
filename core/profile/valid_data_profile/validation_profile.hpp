@@ -12,7 +12,7 @@ namespace PROFILE {
     
     namespace VALID {
      
-        using Buffer = std::pmr::vector<uint8_t>;
+        using Buffer = std::pmr::vector<std::uint8_t>;
         
         class RequestContext{
         private:
