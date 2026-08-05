@@ -32,6 +32,7 @@ namespace CORE {
                 if (type_value > static_cast<std::uint8_t>(EventTYPE::PostDelete)) {
                     throw std::runtime_error ("Invalid event type!");
                 }
+                _event -> EventTYPE = static_cast<EventType>(type_value);
                 
 
             } catch(const std::exception& exc) {
