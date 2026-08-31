@@ -5,50 +5,36 @@
 #include <nlohmann/json.hpp>
 #include <optional>
 
+#define MB(x)((x) * 1024ULL * 1024ULL)
+
 namespace Core {
-
+    
     enum class LogLevel : uint8_t {
-        Trace,
-        Debug,
-        Info,
-        Warn,
-        Error,
-        Fatal,
-        Off
+        Trace, Debug, Info, Warn, Error, Fatal
     };
     
-    enum class LogType : uint8_t {
-        Access_Logs, /* для фиксация запросов к приложению*/
-        Error_Logs, /* для багов, сбоев, исключений и критических ошибок*/
-        Audit_Logs, /* для пользовательских логов, удаление файлов , создание профилей и т.д */
-        Transaction_Logs /* для цепочек действий, для отслеживания  сложных багов */
+    enum class LogCategory : uint8_t {
+        Core,
+        Network,
+        Business, 
+        Audit
     };
-
-    struct SinkConfig {
-        enum class Type {
-            Console,
-            FileDaily,
-            FileRotating,
-            Syslog
-        };
-        
-    };
-    
 
     struct LoggerConfig {
 
         bool async = {true};
-        std::string formatting_date_time = "[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] [%t] %v";
-        std::string log_dir = {"logs"};
+        bool console{true};
+        bool file{true};
+        bool enable_overflow {true};
+
+        std::size_t thread_count {2};
         
-
-       
-       /* struct DateTime {
-            std::chrono::hours log_hours;
-            std::chrono::day log_day; 
-            std::chrono::moth log_moth;
-            std::chrono::year log_year;    
-        };*/
+        std::string formatting_date_time = "[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] [%t] %v";
+        std::filesystem::path log_dir = {"logs"};
+        std::size_t max_file_bytes = MB(50);
+        std::size_t max_files {9};
+        
+        
     }
-
+    
 };

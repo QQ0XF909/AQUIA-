@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.25)
 
-project{
+project(
     log_System
-    Version 1.0.0
+    VERSION 1.0.0
     LANGUAGES  C CXX
-}
+)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -28,13 +28,37 @@ FetchContent_Declare(
   DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 
+set(SPDLOG_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
+set(SPDLOG_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(SPDLOG_INSTALL OFF CACHE BOOL "" FORCE)
+
 FetchContent_MakeAvailable(spdlog nlohmann_json)
 
 find_package(Threads REQUIRED)
 
+add_library (
+  src/Logger.hpp
+  src/file_sink.cpp 
+  src/console_sink.cpp
+)
 
-add_library {
-    src/Logger.hpp
-    
+target_link_libraries(
+  log_System
+  PUBLIC
+  spdlog::spdlog
+  nlohmann_json::nlohmann_json
+  Threads::Threads
+)
+  
+target_include_directories(
+  log_System
+    PUBLIC  ${PROJECT_SOURCE_DIR}/include 
+    PRIVATE ${PROJECT_SOURCE_DIR}/src
+) 
+ 
 
-}
+  target_compile_definitions(
+    log_System
+    PUBLIC
+    SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_TRACE
+    )
